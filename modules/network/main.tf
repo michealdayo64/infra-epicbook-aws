@@ -132,10 +132,10 @@ resource "aws_security_group" "backend_sg" {
   }
 
   ingress {
-    description = "SSH"
-    from_port   = 22
-    to_port     = 22
-    protocol    = "tcp"
+    description     = "SSH"
+    from_port       = 22
+    to_port         = 22
+    protocol        = "tcp"
     security_groups = [aws_security_group.frontend_sg.id]
   }
 

@@ -19,11 +19,11 @@ variable "db_instance_class" {
 }
 
 variable "db_name" {
-  type    = string
+  type = string
 }
 
 variable "db_username" {
-  type    = string
+  type      = string
   sensitive = true
 }
 

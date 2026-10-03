@@ -9,7 +9,7 @@ variable "project_name" {
 }
 
 variable "vpc_cidr" {
-  type    = string
+  type = string
 }
 
 variable "public_subnet_cidr" {
@@ -62,11 +62,11 @@ variable "db_instance_class" {
 }
 
 variable "db_name" {
-  type    = string
+  type = string
 }
 
 variable "db_username" {
-  type    = string
+  type      = string
   sensitive = true
 }
 
