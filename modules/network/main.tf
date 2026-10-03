@@ -23,7 +23,7 @@ data "aws_availability_zones" "available" {
 resource "aws_subnet" "public_subnet" {
   vpc_id                  = aws_vpc.vpc.id
   cidr_block              = var.public_subnet_cidr
-  availability_zone       = aws_availability_zones.available.names[0]
+  availability_zone       = data.aws_availability_zones.available.names[0]
   map_public_ip_on_launch = true
 
   tags = {
@@ -34,7 +34,7 @@ resource "aws_subnet" "public_subnet" {
 resource "aws_subnet" "private_subnet" {
   vpc_id            = aws_vpc.vpc.id
   cidr_block        = var.private_subnet_cidr
-  availability_zone = aws_availability_zones.available.names[0]
+  availability_zone = data.aws_availability_zones.available.names[0]
 
   tags = {
     Name = "${var.project_name}-private-app-subnet"
@@ -44,7 +44,7 @@ resource "aws_subnet" "private_subnet" {
 resource "aws_subnet" "private_db_subnet_1" {
   vpc_id            = aws_vpc.vpc.id
   cidr_block        = var.private_db_subnet_cidr_1
-  availability_zone = aws_availability_zones.available.names[0]
+  availability_zone = data.aws_availability_zones.available.names[0]
 
   tags = {
     Name = "${var.project_name}-private-db-subnet"
@@ -54,7 +54,7 @@ resource "aws_subnet" "private_db_subnet_1" {
 resource "aws_subnet" "private_db_subnet_2" {
   vpc_id            = aws_vpc.vpc.id
   cidr_block        = var.private_db_subnet_cidr_2
-  availability_zone = aws_availability_zones.available.names[1]
+  availability_zone = data.aws_availability_zones.available.names[1]
 
   tags = {
     Name = "${var.project_name}-private-db-subnet"
@@ -101,8 +101,8 @@ resource "aws_security_group" "frontend_sg" {
 
   ingress {
     description = "Allow backend access"
-    from_port   = var.backend_app_port
-    to_port     = var.backend_app_port
+    from_port   = 22
+    to_port     = 22
     protocol    = "tcp"
     cidr_blocks = [var.pipeline_agent_ip]
   }
