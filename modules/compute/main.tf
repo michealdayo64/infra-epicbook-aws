@@ -71,7 +71,7 @@ resource "aws_instance" "backend" {
 
   key_name = aws_key_pair.deployer1.key_name
 
-  associate_public_ip_address = false
+  associate_public_ip_address = true
 
 
   tags = {
