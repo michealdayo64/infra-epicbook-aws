@@ -2,7 +2,11 @@ output "frontend_public_ip" {
   value = module.compute.frontend_public_ip
 }
 
-output "backend_public_ip" {
+outpute "backend_public_ip" {
+  value = module.compute.backend_public_ip
+}
+
+output "backend_private_ip" {
   value = module.compute.backend_private_ip
 }
 
