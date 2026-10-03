@@ -29,7 +29,7 @@ pool:
 # ------------------------------------------------------------
 
 variables:
-  - group: epicbook-aws
+  - group: Epicbook-mysql-secrets
 
   - name: TF_IN_AUTOMATION
     value: 'true'
@@ -171,8 +171,8 @@ stages:
         AWS_SECRET_ACCESS_KEY: $(AWS_SECRET_ACCESS_KEY)
         AWS_DEFAULT_REGION: $(AWS_REGION)
 
-        TF_VAR_db_username: $(DB_USERNAME)
-        TF_VAR_db_password: $(DB_PASSWORD)
+        TF_VAR_db_username: $(mysqlAdminUsername)
+        TF_VAR_db_password: $(mysqlAdminPassword)
 
 
     # --------------------------------------------------------
@@ -275,8 +275,8 @@ stages:
               AWS_SECRET_ACCESS_KEY: $(AWS_SECRET_ACCESS_KEY)
               AWS_DEFAULT_REGION: $(AWS_REGION)
 
-              TF_VAR_db_username: $(DB_USERNAME)
-              TF_VAR_db_password: $(DB_PASSWORD)
+              TF_VAR_db_username: $(mysqlAdminUsername)
+              TF_VAR_db_password: $(mysqlAdminPassword)
 
 
           # --------------------------------------------------
