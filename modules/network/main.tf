@@ -74,15 +74,16 @@ resource "aws_route_table" "public_rt" {
   }
 }
 
-resource "aws_route_table_association" "public" {
+resource "aws_route_table_association" "public_1" {
   subnet_id      = aws_subnet.public_subnet.id
   route_table_id = aws_route_table.public_rt.id
 }
 
-resource "aws_route_table_association" "public" {
+resource "aws_route_table_association" "public_2" {
   subnet_id      = aws_subnet.private_subnet.id
   route_table_id = aws_route_table.public_rt.id
 }
+
 
 resource "aws_security_group" "frontend_sg" {
   name   = "${var.project_name}-frontend-sg"

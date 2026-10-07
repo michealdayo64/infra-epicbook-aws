@@ -27,7 +27,7 @@ vpc_cidr = "10.0.0.0/16"
 ssh_public_key_path = "id_ed25519.pub"
 
 # Replace with your actual IP /32.
-allowed_admin_ip = "102.90.99.20/32"
+allowed_admin_ip = "102.88.109.246/32"
 
 # Replace with your Azure DevOps agent's reachable IP /32.
 pipeline_agent_ip = "172.209.216.74/32"
