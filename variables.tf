@@ -5,7 +5,7 @@ variable "aws_region" {
 
 variable "project_name" {
   type    = string
-  default = "epicbook"
+  default = "bookreview"
 }
 
 variable "vpc_cidr" {

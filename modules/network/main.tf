@@ -131,8 +131,8 @@ resource "aws_security_group" "backend_sg" {
 
   ingress {
     description     = "Node.js application"
-    from_port       = 3000
-    to_port         = 3000
+    from_port       = 3001
+    to_port         = 3001
     protocol        = "tcp"
     security_groups = [aws_security_group.frontend_sg.id]
   }
