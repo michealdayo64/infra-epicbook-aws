@@ -8,16 +8,16 @@ resource "aws_vpc" "vpc" {
   }
 }
 
-resource "aws_internet_gateway" "this" {
+data "aws_availability_zones" "available" {
+  state = "available"
+}
+
+resource "aws_internet_gateway" "igw" {
   vpc_id = aws_vpc.vpc.id
 
   tags = {
     Name = "${var.project_name}-igw"
   }
-}
-
-data "aws_availability_zones" "available" {
-  state = "available"
 }
 
 resource "aws_subnet" "public_subnet" {
@@ -41,6 +41,7 @@ resource "aws_subnet" "private_subnet" {
   }
 }
 
+
 resource "aws_subnet" "private_db_subnet_1" {
   vpc_id            = aws_vpc.vpc.id
   cidr_block        = var.private_db_subnet_cidr_1
@@ -61,12 +62,42 @@ resource "aws_subnet" "private_db_subnet_2" {
   }
 }
 
+# --------------------------------
+# Elastic IP for NAT Gateway
+# --------------------------------
+
+resource "aws_eip" "nat_eip" {
+  domain = "vpc"
+
+  tags = {
+    Name = "${var.project_name}-nat-eip"
+  }
+
+  depends_on = [aws_internet_gateway.igw]
+}
+
+# --------------------------------
+# NAT Gateway
+# --------------------------------
+
+resource "aws_nat_gateway" "nat" {
+  allocation_id = aws_eip.nat_eip.id
+  subnet_id     = aws_subnet.public_subnet.id
+
+  tags = {
+    Name = "${var.project_name}-nat-gateway"
+  }
+
+  depends_on = [aws_internet_gateway.igw]
+}
+
+
 resource "aws_route_table" "public_rt" {
   vpc_id = aws_vpc.vpc.id
 
   route {
     cidr_block = "0.0.0.0/0"
-    gateway_id = aws_internet_gateway.this.id
+    gateway_id = aws_internet_gateway.igw.id
   }
 
   tags = {
@@ -81,11 +112,20 @@ resource "aws_route_table" "private_rt" {
 
   route{
     cidr_block = "0.0.0.0/0"
-    gateway_id = aws_internet_gateway.this.id
+    nat_gateway_id = aws_nat_gateway.nat.id
   }
 
   tags = {
     Name = "${var.project_name}-private-rt"
+  }
+  
+}
+
+resource "aws_route_table" "private_db_rt" {
+  vpc_id = aws_vpc.vpc.id
+
+  tags = {
+    Name = "${var.project_name}-private-db-rt"
   }
   
 }
@@ -95,9 +135,19 @@ resource "aws_route_table_association" "public_1" {
   route_table_id = aws_route_table.public_rt.id
 }
 
-resource "aws_route_table_association" "public_2" {
+resource "aws_route_table_association" "private_1" {
   subnet_id      = aws_subnet.private_subnet.id
-  route_table_id = aws_route_table.public_rt.id
+  route_table_id = aws_route_table.private_rt.id
+}
+
+resource "aws_route_table_association" "private_db_1" {
+  subnet_id      = aws_subnet.private_db_subnet_1.id
+  route_table_id = aws_route_table.private_db_rt.id
+}
+
+resource "aws_route_table_association" "private_db_2" {
+  subnet_id      = aws_subnet.private_db_subnet_2.id
+  route_table_id = aws_route_table.private_db_rt.id
 }
 
 
@@ -121,13 +171,13 @@ resource "aws_security_group" "frontend_sg" {
     cidr_blocks = [var.allowed_admin_ip]
   }
 
-  ingress {
-    description = "Allow backend access"
-    from_port   = 22
-    to_port     = 22
-    protocol    = "tcp"
-    cidr_blocks = [var.pipeline_agent_ip]
-  }
+  #ingress {
+   # description = "Allow backend access"
+   # from_port   = 22
+    #to_port     = 22
+    #protocol    = "tcp"
+    #cidr_blocks = [var.pipeline_agent_ip]
+  #}
 
   egress {
     from_port   = 0

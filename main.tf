@@ -8,7 +8,7 @@ module "network" {
   private_db_subnet_cidr_1 = var.private_db_subnet_cidr_1
   private_db_subnet_cidr_2 = var.private_db_subnet_cidr_2
   allowed_admin_ip         = var.allowed_admin_ip
-  pipeline_agent_ip        = var.pipeline_agent_ip
+  #pipeline_agent_ip        = var.pipeline_agent_ip
 }
 
 

@@ -32,7 +32,7 @@ variable "allowed_admin_ip" {
   type        = string
 }
 
-variable "pipeline_agent_ip" {
-  description = "The IP address of the pipeline agent allowed to access the EC2 instances"
-  type        = string
-}
+#variable "pipeline_agent_ip" {
+#  description = "The IP address of the pipeline agent allowed to access the EC2 instances"
+#  type        = string
+#}
